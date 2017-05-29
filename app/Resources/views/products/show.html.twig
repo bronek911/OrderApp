@@ -1,0 +1,37 @@
+{% extends 'dashboard.html.twig' %}
+
+{% block body %}
+    <h1>Produkt</h1>
+    <p class="category">
+        <a href="{{ path('products_index') }}">Wróć do listy</a> -
+        <a href="{{ path('products_edit', { 'id': product.id }) }}">Edytuj</a>
+    </p>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ product.id }}</td>
+        </tr>
+        <tr>
+            <th>Nazwa</th>
+            <td>{{ product.name }}</td>
+        </tr>
+        <tr>
+            <th>Ilość</th>
+            <td>{{ product.stock }}</td>
+        </tr>
+        <tr>
+            <th>Cena za opakowanie</th>
+            <td>{{ product.price|number_format(2) }} zł</td>
+        </tr>
+        <tr>
+            <th>Cena za kilo</th>
+            <td>{{ product.priceKg|number_format(2) }} zł</td>
+        </tr>
+        </tbody>
+    </table>
+    {{ form_start(delete_form) }}
+    <button class="btn btn-danger btn-fill btn-wd" type="submit" value="Delete">del</button>
+    {{ form_end(delete_form) }}
+{% endblock %}

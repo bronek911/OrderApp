@@ -1,0 +1,48 @@
+{% extends 'dashboard.html.twig' %}
+
+{% block body %}
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Lista klientów</h4>
+                <p class="category"><a href="{{ path('clients_new') }}">Utwórz nowego klienta</a></p>
+            </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table table-striped">
+                    <thead>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Company</th>
+                    <th>Nip</th>
+                    <th>Actions</th>
+                    </thead>
+                    <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <td><a href="{{ path('clients_show', { 'id': client.id }) }}">{{ client.id }}</a></td>
+                            <td>{{ client.name }}</td>
+                            <td>{{ client.surname }}</td>
+                            <td>{{ client.company }}</td>
+                            <td>{{ client.nip }}</td>
+                            <td>
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('clients_show', { 'id': client.id }) }}">show</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('clients_edit', { 'id': client.id }) }}">edit</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

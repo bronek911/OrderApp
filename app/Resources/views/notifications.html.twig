@@ -1,0 +1,56 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar bar1"></span>
+                <span class="icon-bar bar2"></span>
+                <span class="icon-bar bar3"></span>
+            </button>
+            <a class="navbar-brand" href="#">{% block controler %}Podstrona{% endblock %}</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="ti-bell"></i>
+                        <p class="notification">{{ noOfUndoneOrders }}</p>
+                        <p>Powiadomień</p>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+
+                        {% for order in lastOrders %}
+                            <li style="background-color:
+                            {% if order.status == true %}
+                                #FF9983
+                            {% elseif order.status == false %}
+                                #8FEB8F
+                            {% endif %}
+                                    ">
+
+                                <a href="{{ path('orders_show', {'id': order.id}) }}">
+                                    <small>{{ order.client.company }} - {{ order.totalPrice|number_format(2) }} zł</small>
+                                </a>
+                            </li>
+                        {% endfor %}
+
+                        <li><a href="{{ path('orders_index') }}">Wyświetl wszystkie</a></li>
+                        <li><a href="{{ path('orders_new') }}" style="color: #0000F0">Utwórz nowe zamówienie</a></li>
+
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="ti-settings"></i>
+                        <p>Ustawienia</p>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('fos_user_security_logout') }}">Wyloguj się</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,47 @@
+{% extends 'dashboard.html.twig' %}
+
+{% block body %}
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Lista produktów</h4>
+                <p class="category"><a href="{{ path('products_new') }}">Utwórz nowy produkt</a></p>
+            </div>
+            <div class="content table-responsive table-full-width">
+                <table class="table table-striped">
+                    <thead>
+                    <th>Id</th>
+                    <th>Nazwa</th>
+                    <th>Cena za opakowanie</th>
+                    <th>Cena za kilogram</th>
+                    <!--<th>Actions</th>-->
+                    </thead>
+                    <tbody>
+                    {% for product in products %}
+                        <tr>
+                            <td><a href="{{ path('products_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
+                            <td>{{ product.name }}</td>
+                            <td align="center">{{ product.price|number_format(2) }} zł</td>
+                            <td align="center">{{ product.priceKg|number_format(2) }} zł</td>
+                            <!--<td>
+                                <ul>
+                                    <li>
+                                        <a href="{{ path('products_show', { 'id': product.id }) }}">show</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('products_edit', { 'id': product.id }) }}">edit</a>
+                                    </li>
+                                </ul>
+                            </td>-->
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

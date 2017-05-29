@@ -1,0 +1,37 @@
+{% extends 'dashboard.html.twig' %}
+
+{% block body %}
+    <h1>Klient</h1>
+    <p class="category">
+        <a href="{{ path('clients_index') }}">Wróć do listy</a> -
+        <a href="{{ path('clients_edit', { 'id': client.id }) }}">Edytuj</a>
+    </p>
+
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ client.id }}</td>
+        </tr>
+        <tr>
+            <th>Imię</th>
+            <td>{{ client.name }}</td>
+        </tr>
+        <tr>
+            <th>Nazwisko</th>
+            <td>{{ client.surname }}</td>
+        </tr>
+        <tr>
+            <th>Firma</th>
+            <td>{{ client.company }}</td>
+        </tr>
+        <tr>
+            <th>Nip</th>
+            <td>{{ client.nip }}</td>
+        </tr>
+        </tbody>
+    </table>
+    {{ form_start(delete_form) }}
+    <button class="btn btn-danger btn-fill btn-wd" type="submit" value="Delete">Usuń</button>
+    {{ form_end(delete_form) }}
+{% endblock %}

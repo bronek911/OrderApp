@@ -1,0 +1,82 @@
+{% extends 'dashboard.html.twig' %}
+
+{% block body %}
+    <div style="padding-left: 10px; padding-right: 10px;">
+        <h1>Zamówienie</h1>
+        <div class="pull-left" style="padding-top: 10px">
+            <p class="category">
+                <a href="{{ path('orders_index') }}">Wróć do listy</a>
+                {% if order.status == 1 %} - <a href="{{ path('orders_edit', { 'id': order.id }) }}">
+                        Edytuj</a>{% endif %}
+
+            </p>
+        </div>
+        <div class="pull-right" style="padding-right: 35px; padding-bottom: 10px">
+            <form action="{{ path('order_move', {'id': order.id}) }}" method="POST">
+                <button class="
+                        btn
+                        {% if order.status == 1 %}
+                        btn-success
+                        {% elseif order.status == 0 %}
+                        btn-info
+                        {% endif %}
+                        btn-fill btn-wd"
+                        type="submit" value="Move">
+
+                    {% if order.status == 1 %}Oznacz jako wykonane
+                    {% elseif order.status == 0 %}Oznacz jako niewykonane
+                    {% endif %}
+                </button>
+            </form>
+        </div>
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Numer zamówienia</th>
+                <td>{{ order.id }}</td>
+            </tr>
+            <tr>
+                <th>Firma</th>
+                <td>{{ order.client.company }}</td>
+            </tr>
+            <tr>
+                <th>Nip</th>
+                <td>{{ order.client.nip }}</td>
+            </tr>
+            <tr>
+                <th colspan="2">Produkty:</th>
+                <table class="table">
+                    <tr>
+                        {% set index = 0 %}
+                        {% for product in products %}
+                        {% for key, value in product %}
+
+                    <tr>
+                        <td></td>
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                        <td>{{ prices[index] }} zł</td>
+                    </tr>
+                    {% set index = index+1 %}
+                    {% endfor %}
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td colspan="2"><b>Suma</b></td>
+                        <td><b>{{ sum }} zł</b></td>
+                    </tr>
+
+                    </tr>
+                </table>
+            </tr>
+            </tbody>
+        </table>
+        <br><br>
+        <div style="padding-left: 35px">
+            {{ form_start(delete_form) }}
+            <button class="btn btn-danger btn-fill btn-wd" type="submit" value="Delete">Usuń</button>
+            {{ form_end(delete_form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'dashboard.html.twig' %}
+
+{% block body %}
+    <div class="col-lg-12 col-md-12">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Utwórz nowy produkt</h4>
+                <p class="category"><a href="{{ path('products_index') }}">Wróć do listy</a></p>
+            </div>
+            <div class="content">
+                <form action="{{ path('products_new') }}" method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Nazwa</label>
+                                <input type="text" class="form-control border-input" name="name">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Ilość</label>
+                                <input type="number" class="form-control border-input" min="0" max="5000" step="1" name="stock">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Cena za opakowanie</label>
+                                <input type="number" class="form-control border-input" min="0" max="5000" step="0.01" name="price">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Cena za kilo</label>
+                                <input type="number" class="form-control border-input" min="0" max="5000" step="0.01" name="price_kg">
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-info btn-fill btn-wd">Zapisz</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </form>
+                <br>
+            </div>
+        </div>
+    </div>
+{% endblock %}
