@@ -1,6 +1,7 @@
 {% extends 'dashboard.html.twig' %}
 
 {% block body %}
+
     <div style="padding-left: 10px; padding-right: 10px;">
         <h1>Zamówienie</h1>
         <div class="pull-left" style="padding-top: 10px">
@@ -48,23 +49,24 @@
                 <th colspan="2">Produkty:</th>
                 <table class="table">
                     <tr>
+
+                        {# Trzeba zmienić tego loopa.  #}
+
                         {% set index = 0 %}
                         {% for product in products %}
-                        {% for key, value in product %}
 
                     <tr>
                         <td></td>
-                        <td>{{ key }}</td>
-                        <td>{{ value }}</td>
-                        <td>{{ prices[index] }} zł</td>
+                        <td>{{ product['name'] }}</td>
+                        <td>{{ product['quantity'] }} x {{ prices[index]|number_format(2) }} zł</td>
+                        <td>{{ product['sum']|number_format(2) }} zł</td>
                     </tr>
                     {% set index = index+1 %}
-                    {% endfor %}
                     {% endfor %}
                     <tr>
                         <td></td>
                         <td colspan="2"><b>Suma</b></td>
-                        <td><b>{{ sum }} zł</b></td>
+                        <td><b>{{ sum|number_format(2) }} zł</b></td>
                     </tr>
 
                     </tr>

@@ -47,31 +47,46 @@ class OrdersController extends Controller
         $form = $this->createForm('OrderAppBundle\Form\OrdersType', $order);
         $form->handleRequest($request);
 
-        $productsArray = $request->get('product');
-        $quantityArray = $request->get('quantity');
-        $orderArray = [];
 
-        for ($i = 0; $i < count($productsArray) - 1; $i++) {
-            $orderArray[$i] = [];
-            $orderArray[$i][$productsArray[$i]] = $quantityArray[$i];
-        }
 
-        if ($request->getMethod() === "POST" && $request->get('client') != null) {
+        if ($request->getMethod() === "POST") {
+
+
+            $clientId = $request->get('client');
+            $productsArray = $request->get('product');
+            $quantityArray = $request->get('quantity');
+            $priceArray = $request->get('price');
+            $sumArray = $request->get('sum');
+            $orderArray = [];
+
+
+            for ($i = 0; $i < count($productsArray); $i++) {
+                $orderArray[$i] = [];
+                $orderArray[$i]['name'] = $productsArray[$i];
+                $orderArray[$i]['quantity'] = $quantityArray[$i];
+                $orderArray[$i]['price'] = $priceArray[$i];
+                $orderArray[$i]['sum'] = $sumArray[$i];
+            }
 
             $sum = 0;
             $productsPrices = [];
 
             for ($i = 0; $i < count($orderArray); $i++) {
-                foreach ($orderArray[$i] as $key => $val) {
-                    $product = $this->getDoctrine()->getRepository('OrderAppBundle:Products')->findOneBy(['name' => $key]);
-                    $productsPrices[$i] = $val * $product->getPrice();
-                    $sum += $productsPrices[$i];
-                }
+
+                $productsPrices[$i] = [];
+
+                //Sprawdzić która cena ma bnyć przesłana
+                $productsPrices[$i] = $orderArray[$i]['sum'];
+
+                $sum += $productsPrices[$i];
             }
+
 
             $clientId = $request->get('client');
             $client = $this->getDoctrine()->getRepository('OrderAppBundle:Clients')->find($clientId);
             $clientCompany = $client->getCompany();
+
+
             $order->setFullOrder(json_encode($orderArray));
             $order->setClient($client);
             $order->setTotalPrice($sum);
@@ -107,6 +122,7 @@ class OrdersController extends Controller
      */
     public function showAction(Orders $order)
     {
+
         $deleteForm = $this->createDeleteForm($order);
         $array = json_decode($order->getFullOrder(), true);
         $productsPrices = [];
@@ -114,7 +130,7 @@ class OrdersController extends Controller
         for ($i = 0; $i < count($array); $i++) {
             foreach ($array[$i] as $key => $val) {
                 $product = $this->getDoctrine()->getRepository('OrderAppBundle:Products')->findOneBy(['name' => $key]);
-                $productsPrices[$i] = $val * $product->getPrice();
+                $productsPrices[$i] = $array[$i]['sum'];
             }
         }
 
@@ -229,8 +245,8 @@ class OrdersController extends Controller
 
     public function lastTenOrdersAction()
     {
-        $lastOrders = $this->getDoctrine()->getManager()->getRepository('OrderAppBundle:Orders')->findBy([], ['id'=>'DESC'], 10);
-        $noOfUndoneOrders = count($this->getDoctrine()->getManager()->getRepository('OrderAppBundle:Orders')->findBy(['status'=>1]));
+        $lastOrders = $this->getDoctrine()->getManager()->getRepository('OrderAppBundle:Orders')->findBy([], ['id' => 'DESC'], 10);
+        $noOfUndoneOrders = count($this->getDoctrine()->getManager()->getRepository('OrderAppBundle:Orders')->findBy(['status' => 1]));
 
         return $this->render('notifications.html.twig', array(
             'lastOrders' => $lastOrders,

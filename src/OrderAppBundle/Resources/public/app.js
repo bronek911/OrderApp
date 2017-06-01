@@ -40,6 +40,12 @@ $(function () {
         var $thumbnail = $('.thumbnail[data-product-id=' + id + ']');
         $thumbnail.find('.caption .quantity').text(quantity);
         $thumbnail.find('.caption .price').text(sum.toFixed(2));
+
+        var newListedProduct = $("<tr><td></td>");
+
+        //var newListedProduct = $("#product_row").clone(true);
+        var listSum = $('#productsListSum');
+        listSum.before(newListedProduct);
     });
 
 
