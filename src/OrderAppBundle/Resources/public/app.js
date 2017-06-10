@@ -11,6 +11,7 @@ $(function () {
     });
 
 
+
     $('.thumbnail').on('click', function () {
 
         var thumbnail = $(this);
@@ -32,8 +33,10 @@ $(function () {
         var ownPrice = $('#radio-price-own').val();
         $('#radio3').attr('value', ownPrice);
 
+        var name = $('.modal-title').text();
         var quantity = $('#product-quantity').val();
         var price = $('input[name=radio]:checked', '#addProductForm').val();
+        var unit = $('input[name=radio-unit]:checked', '#addProductForm').val();
         var sum = quantity * price;
         var id = $('#product-id').val();
 
@@ -41,11 +44,29 @@ $(function () {
         $thumbnail.find('.caption .quantity').text(quantity);
         $thumbnail.find('.caption .price').text(sum.toFixed(2));
 
-        var newListedProduct = $("<tr><td></td>");
+        if ($("#receipt").find("." + name).length === 0) {
 
-        //var newListedProduct = $("#product_row").clone(true);
-        var listSum = $('#productsListSum');
-        listSum.before(newListedProduct);
+            var newListedProduct = $("" +
+                "<tr class='" + name + "'>" +
+                "<td class='name'>" + name + "<input type='hidden' name='product[]' value='" + name + "'></td>" +
+                "<td class='price'>" + price + " zł<input type='hidden' name='price[]' value='" + price + "'></td>" +
+                "<td class='quantity'>" + quantity + "<input type='hidden' name='quantity[]' value='" + quantity + "'></td>" +
+                "<td class='sum'>" + sum.toFixed(2) + " zł<input type='hidden' name='sum[]' value='" + sum + "'></td>" +
+                "</tr>");
+
+            var listSum = $('#productsListSum');
+            listSum.before(newListedProduct);
+
+        } else {
+
+            var productRow = $("#receipt").find("." + name);
+            productRow.find(".name").html(name + "<input type='hidden' name='product[]' value='" + name + "'>");
+            productRow.find(".price").html(price + " zł<input type='hidden' name='price[]' value='" + price + "'>");
+            productRow.find(".quantity").html(quantity + "<input type='hidden' name='quantity[]' value='" + quantity + "'>");
+            productRow.find(".sum").html(sum.toFixed(2) + " zł<input type='hidden' name='sum[]' value='" + sum + "'>");
+
+        }
+
     });
 
 

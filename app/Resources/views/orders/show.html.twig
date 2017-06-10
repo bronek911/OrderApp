@@ -2,6 +2,7 @@
 
 {% block body %}
 
+
     <div style="padding-left: 10px; padding-right: 10px;">
         <h1>Zamówienie</h1>
         <div class="pull-left" style="padding-top: 10px">
@@ -58,7 +59,7 @@
                     <tr>
                         <td></td>
                         <td>{{ product['name'] }}</td>
-                        <td>{{ product['quantity'] }} x {{ prices[index]|number_format(2) }} zł</td>
+                        <td>{{ product['quantity'] }} x {{ product['price']|number_format(2) }} zł</td>
                         <td>{{ product['sum']|number_format(2) }} zł</td>
                     </tr>
                     {% set index = index+1 %}

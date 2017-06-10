@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\True;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Order controller.
@@ -48,11 +49,14 @@ class OrdersController extends Controller
         $form->handleRequest($request);
 
 
-
         if ($request->getMethod() === "POST") {
 
+            $validator = $this->get('validator');
+            $errors = $validator->validate($order);
 
-            $clientId = $request->get('client');
+
+            $clientCompany = $request->get('client');
+            $client = $this->getDoctrine()->getRepository('OrderAppBundle:Clients')->findOneBy(['company' => $clientCompany]);
             $productsArray = $request->get('product');
             $quantityArray = $request->get('quantity');
             $priceArray = $request->get('price');
@@ -82,14 +86,20 @@ class OrdersController extends Controller
             }
 
 
-            $clientId = $request->get('client');
-            $client = $this->getDoctrine()->getRepository('OrderAppBundle:Clients')->find($clientId);
-            $clientCompany = $client->getCompany();
-
-
             $order->setFullOrder(json_encode($orderArray));
             $order->setClient($client);
             $order->setTotalPrice($sum);
+
+            if (count($errors) > 0) {
+
+                $productsList = $this->getDoctrine()->getRepository('OrderAppBundle:Products')->findAll();
+
+                return $this->render('orders/new.html.twig', array(
+                    'order' => $order,
+                    'form' => $form->createView(),
+                    'products' => $productsList,
+                ));
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($order);
@@ -253,7 +263,6 @@ class OrdersController extends Controller
             'noOfUndoneOrders' => $noOfUndoneOrders,
         ));
     }
-
 
     /**
      * Creates a form to delete a order entity.

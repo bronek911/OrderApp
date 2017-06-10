@@ -5,8 +5,11 @@
     <div class="col-md-12">
         <div class="card">
             <div class="header">
-                <h4 class="title">Lista produktów</h4>
-                <p class="category"><a href="{{ path('products_new') }}">Utwórz nowy produkt</a></p>
+                <div>
+                    <h4 class="title">Lista produktów &nbsp;&nbsp; <a href="{{ path('products_new') }}" class="btn btn-success btn-fill">
+                            <i class="ti-plus"></i>
+                        </a></h4><br>
+                </div>
             </div>
             <div class="content table-responsive table-full-width">
                 <table class="table table-striped">
@@ -20,7 +23,8 @@
                     <tbody>
                     {% for product in products %}
                         <tr>
-                            <td><a href="{{ path('products_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
+                            <td><a href="{{ path('products_show', { 'id': product.id }) }}" class="btn btn-info
+                                   btn-fill">{{ product.id }}</a></td>
                             <td>{{ product.name }}</td>
                             <td align="center">{{ product.price|number_format(2) }} zł</td>
                             <td align="center">{{ product.priceKg|number_format(2) }} zł</td>

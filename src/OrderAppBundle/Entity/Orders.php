@@ -4,6 +4,8 @@ namespace OrderAppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Orders
@@ -49,6 +51,7 @@ class Orders
 
     /**
      * @ORM\ManyToMany(targetEntity="Products", inversedBy="orders")
+     *
      */
     private $products;
 

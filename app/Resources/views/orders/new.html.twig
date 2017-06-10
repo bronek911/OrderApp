@@ -1,31 +1,33 @@
 {% extends 'dashboard.html.twig' %}
 
-{% block body %}
 
+
+{% block body %}
     <div class="col-lg-5 col-md-5">
         <div class="card" id="receipt">
             <form action="{{ path('orders_new') }}" method="POST">
                 <div class="header">
-                    <h4 class="title">Wybrane produkty&nbsp;&nbsp;&nbsp;<button type="submit"
-                                                                                class="btn btn-success btn-fill pull-right">
+                    <h4 class="title">Wybrane produkty&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-success btn-fill pull-right">
                             Zapisz zamówienie
                         </button>
                     </h4>
                     <br>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label>Imię</label>
-                            <select class="form-control" id="clients_form" name="client">
-                                <option value="" selected>Wybierz klienta</option>
-                                {% for client in clients %}
-                                    <option value="{{ client.id }}">{{ client.company }}</option>
-                                {% endfor %}
-                            </select>
+                <br>
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <div class="form-group">
+
+                        <!-- Tu wybór klienta inputem text z autocomplete -->
+
+                        <div class="ui-widget">
+                            <label>Klient</label>
+                            <input id="choose-client" name="client" type="text" class="form-control">
                         </div>
+
                     </div>
                 </div>
+                <div class="col-md-1"></div>
                 <div class="content table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -87,9 +89,7 @@
                             </div>
                         {% endfor %}
 
-
                     </div>
-
                 </div>
             </div>
         </div>
