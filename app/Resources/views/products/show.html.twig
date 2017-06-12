@@ -3,10 +3,10 @@
 {% block body %}
     <h1>Produkt</h1>
     <p class="category">
-        <a href="{{ path('products_index') }}">Wróć do listy</a> -
-        <a href="{{ path('products_edit', { 'id': product.id }) }}">Edytuj</a>
+        <a type="button" class="btn btn-success btn-fill btn-wd" href="{{ path('products_index') }}">Wróć do listy</a>
+        <a type="button" class="btn btn-info btn-fill btn-wd" href="{{ path('products_edit', { 'id': product.id }) }}">Edytuj</a>
     </p>
-
+    <br>
     <table class="table">
         <tbody>
         <tr>
@@ -32,6 +32,6 @@
         </tbody>
     </table>
     {{ form_start(delete_form) }}
-    <button class="btn btn-danger btn-fill btn-wd" type="submit" value="Delete">del</button>
+    <button class="btn btn-danger btn-fill btn-wd" type="submit" value="Delete">Usuń</button>
     {{ form_end(delete_form) }}
 {% endblock %}

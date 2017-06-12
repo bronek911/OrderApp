@@ -5,7 +5,11 @@
         <div class="card">
             <div class="header">
                 <h4 class="title">Edytuj produkt</h4>
-                <p class="category"><a href="{{ path('products_index') }}">Wróć do listy</a></p>
+                <div class="row">
+                    <p class="category pull-right" style="padding-right: 25px;">
+                        <a type="button" class="btn btn-success btn-fill btn-wd" href="{{ path('products_index') }}">Wróć do listy</a>
+                    </p>
+                </div>
             </div>
             <div class="content">
                 <form action="" method="POST">
@@ -21,7 +25,7 @@
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Ilość</label>
                                 <input type="number" class="form-control border-input" min="0" max="5000" step="1"
-                                       name="stock" value="{{ product.stock }}">
+                                       name="stock" value="{{ product.stock }}" disabled>
                             </div>
                         </div>
                     </div>

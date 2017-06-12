@@ -54,7 +54,6 @@ class OrdersController extends Controller
             $validator = $this->get('validator');
             $errors = $validator->validate($order);
 
-
             $clientCompany = $request->get('client');
             $client = $this->getDoctrine()->getRepository('OrderAppBundle:Clients')->findOneBy(['company' => $clientCompany]);
             $productsArray = $request->get('product');
@@ -62,7 +61,6 @@ class OrdersController extends Controller
             $priceArray = $request->get('price');
             $sumArray = $request->get('sum');
             $orderArray = [];
-
 
             for ($i = 0; $i < count($productsArray); $i++) {
                 $orderArray[$i] = [];
@@ -113,8 +111,10 @@ class OrdersController extends Controller
             ));
         }
 
+
         $productsList = $this->getDoctrine()->getRepository('OrderAppBundle:Products')->findAll();
         $clients = $this->getDoctrine()->getRepository('OrderAppBundle:Clients')->findAll();
+
 
         return $this->render('orders/new.html.twig', array(
             'order' => $order,
@@ -165,39 +165,97 @@ class OrdersController extends Controller
         $editForm = $this->createForm('OrderAppBundle\Form\OrdersType', $order);
         $editForm->handleRequest($request);
 
+
         $orderArray = json_decode($order->getFullOrder(), true);
         $productsList = $this->getDoctrine()->getRepository('OrderAppBundle:Products')->findAll();
 
         if ($request->getMethod() === "POST") {
 
+
+            $clientCompany = $request->get('client');
+            $client = $this->getDoctrine()->getRepository('OrderAppBundle:Clients')->findOneBy(['company' => $clientCompany]);
+
             $productsArray = $request->get('product');
             $quantityArray = $request->get('quantity');
-
+            $priceArray = $request->get('price');
+            $sumArray = $request->get('sum');
             $orderArray = [];
 
-            for ($i = 0; $i < count($productsArray) - 1; $i++) {
+            for ($i = 0; $i < count($productsArray); $i++) {
                 $orderArray[$i] = [];
-                $orderArray[$i][$productsArray[$i]] = $quantityArray[$i];
+                $orderArray[$i]['name'] = $productsArray[$i];
+                $orderArray[$i]['quantity'] = $quantityArray[$i];
+                $orderArray[$i]['price'] = $priceArray[$i];
+                $orderArray[$i]['sum'] = $sumArray[$i];
             }
 
             $sum = 0;
             $productsPrices = [];
 
             for ($i = 0; $i < count($orderArray); $i++) {
-                foreach ($orderArray[$i] as $key => $val) {
-                    $product = $this->getDoctrine()->getRepository('OrderAppBundle:Products')->findOneBy(['name' => $key]);
-                    $productsPrices[$i] = $val * $product->getPrice();
-                    $sum += $productsPrices[$i];
-                }
+
+                $productsPrices[$i] = [];
+
+                //Sprawdzić która cena ma bnyć przesłana
+                $productsPrices[$i] = $orderArray[$i]['sum'];
+
+                $sum += $productsPrices[$i];
             }
 
+
             $order->setFullOrder(json_encode($orderArray));
+            $order->setClient($client);
             $order->setTotalPrice($sum);
 
-            $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('orders_edit', array('id' => $order->getId()));
+            $productsList = $this->getDoctrine()->getRepository('OrderAppBundle:Products')->findAll();
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($order);
+            $em->flush();
+
+            return $this->redirectToRoute('orders_show', array(
+                'id' => $order->getId(),
+                'company' => $clientCompany,
+                'products' => $orderArray,
+                'prices' => $productsPrices,
+            ));
+
+
+            ///////////////
+
+
+//            $productsArray = $request->get('product');
+//            $quantityArray = $request->get('quantity');
+//
+//            $orderArray = [];
+//
+//            for ($i = 0; $i < count($productsArray) - 1; $i++) {
+//                $orderArray[$i] = [];
+//                $orderArray[$i][$productsArray[$i]] = $quantityArray[$i];
+//            }
+//
+//            $sum = 0;
+//            $productsPrices = [];
+//
+//            for ($i = 0; $i < count($orderArray); $i++) {
+//                foreach ($orderArray[$i] as $key => $val) {
+//                    $product = $this->getDoctrine()->getRepository('OrderAppBundle:Products')->findOneBy(['name' => $key]);
+//                    $productsPrices[$i] = $val * $product->getPrice();
+//                    $sum += $productsPrices[$i];
+//                }
+//            }
+//
+//            $order->setFullOrder(json_encode($orderArray));
+//            $order->setTotalPrice($sum);
+//
+//            $this->getDoctrine()->getManager()->flush();
+//
+//            return $this->redirectToRoute('orders_edit', array('products' => $orderArray, 'id' => $order->getId()));
         }
+
+        //$productsList = $this->getDoctrine()->getRepository('OrderAppBundle:Products')->findAll();
 
         return $this->render('orders/edit.html.twig', array(
             'order' => $order,

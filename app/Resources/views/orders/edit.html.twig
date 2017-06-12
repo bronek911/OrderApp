@@ -1,98 +1,208 @@
 {% extends 'dashboard.html.twig' %}
 
 {% block body %}
+    <div class="col-lg-5 col-md-5">
+        <div class="card" id="receipt">
+            <form action="{{ path('orders_edit', { 'id': order.id }) }}" method="POST">
 
-    <div class="col-lg-12 col-md-12">
-        <div class="card">
-            <div class="header">
-                <h4 class="title">Edytuj zamówienie</h4>
-                <p class="category">
-                    <a href="{{ path('orders_index') }}">Wróć do listy</a> -
-                    <a href="{{ path('orders_show', { 'id': order.id }) }}">Wyświetl to zamówienie</a>
-                </p>
-            </div>
-            <div class="content">
-                <form action="" method="POST">
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Firma</label>
-                                <input type="text" class="form-control border-input" disabled placeholder="Firma"
-                                       value="{{ order.client.company }}">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="product-holder">
-
-                        {% for product in products %}
-                            {% for key, value in product %}
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label>Produkt</label>
-                                            <select class="form-control product_form {% if key in productsList|keys %}old_product{% endif %}"
-                                                    name="product[]">
-
-                                                <option value="null"></option>
-                                                {% for productList in productsList %}
-                                                    <option value="{{ productList }}"
-                                                            {% if productList == key %}selected{% endif %}>{{ productList }}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Ilość</label>
-                                            <input class="form-control" type="number" name="quantity[]"
-                                                   value="{{ value }}">
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% endfor %}
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group">
-                                    <label>Produkt</label>
-                                    <select class="form-control product_form" name="product[]">
-
-                                        <option value="null"></option>
-                                        {% for productList in productsList %}
-                                            <option value="{{ productList }}">{{ productList }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Ilość</label>
-                                    <input class="form-control" type="number" name="quantity[]">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-info btn-fill btn-wd">Zapisz</button>
-                        </div>
-
-                        <div class="clearfix"></div>
-                    </div>
-                </form>
-                <br>
-                <div class="row">
-                    <div class="text-center">
-                        {{ form_start(delete_form) }}
-                        <button type="submit" class="btn btn-danger btn-fill btn-wd" value="Delete">Usuń</button>
-                        {{ form_end(delete_form) }}
-                    </div>
+                <div class="header">
+                    <h4 class="title">Wybrane produkty&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-success btn-fill pull-right">
+                            Zapisz zamówienie
+                        </button>
+                    </h4>
+                    <br>
                 </div>
                 <br>
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+                    <div class="form-group">
+
+                        <!-- Tu wybór klienta inputem text z autocomplete -->
+
+                        <div class="ui-widget">
+                            <label>Klient</label>
+                            <input id="choose-client" name="client" type="text" class="form-control" value="{{ order.client.company }}">
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="content table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <th>Nazwa</th>
+                        <th>Cena</th>
+                        <th>Ilość</th>
+                        <th>Suma</th>
+                        </thead>
+                        <tbody>
+
+                        {% for chosenProduct in products %}
+                        <tr class='{{ chosenProduct.name }}'>
+                            <td class='name'>{{ chosenProduct.name }}<input type='hidden' name='product[]' value='{{ chosenProduct.name }}'></td>
+                            <td class='price'>{{ chosenProduct.price|number_format(2) }} zł<input type='hidden' name='price[]' value='{{ chosenProduct.price|number_format(2) }}'></td>
+                            <td class='quantity'>{{ chosenProduct.quantity }}<input type='hidden' name='quantity[]' value='{{ chosenProduct.quantity }}"'></td>
+                            <td class='sum'>{{ chosenProduct.sum|number_format(2) }} zł<input type='hidden' name='sum[]' value='{{ chosenProduct.sum|number_format(2) }}'></td>
+                        </tr>
+                        {% endfor %}
+
+
+                        <tr id="productsListSum">
+                            <td></td>
+                            <td></td>
+                            <td><b>Suma:</b></td>
+                            <td>
+                                <span id="orderSum">{{ order.totalPrice }}</span> zł
+                            </td>
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-7 col-md-7">
+        <div class="card">
+            <div class="header">
+                <h4 class="title">Wybrane produkty</h4>
+            </div>
+            <div class="content table-responsive">
+
+                <div class="container-fluid">
+                    <div class="row">
+
+
+                        {% for product in productsList %}
+                            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-3 col-xs-4">
+                                <div class="card">
+
+                                    <div class="thumbnail" id="product{{ product.id }}"
+                                         data-product-id="{{ product.id }}" data-product-name="{{ product.name }}"
+                                         data-product-price="{{ product.price }}"
+                                         data-product-price-kg="{{ product.priceKg }}">
+                                        <a href="#" data-toggle="modal" data-target="#myModal">
+                                            <img src="https://www.w3schools.com/bootstrap/img_avatar1.png" alt="Lights"
+                                                 style="width:100%">
+                                            <div class="caption">
+                                                <p>
+                                                    <small><b>{{ product }}</b></small>
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+
+
+
+
+
+
+
+    {#<div class="col-lg-12 col-md-12">#}
+        {#<div class="card">#}
+            {#<div class="header">#}
+                {#<h4 class="title">Edytuj zamówienie</h4>#}
+                {#<p class="category">#}
+                    {#<a href="{{ path('orders_index') }}">Wróć do listy</a> -#}
+                    {#<a href="{{ path('orders_show', { 'id': order.id }) }}">Wyświetl to zamówienie</a>#}
+                {#</p>#}
+            {#</div>#}
+            {#<div class="content">#}
+                {#<form action="" method="POST">#}
+
+                    {#<div class="row">#}
+                        {#<div class="col-md-12">#}
+                            {#<div class="form-group">#}
+                                {#<label>Firma</label>#}
+                                {#<input type="text" class="form-control border-input" disabled placeholder="Firma"#}
+                                       {#value="{{ order.client.company }}">#}
+                            {#</div>#}
+                        {#</div>#}
+                    {#</div>#}
+
+                    {#<div id="product-holder">#}
+
+                        {#{% for product in products %}#}
+                            {#{% for key, value in product %}#}
+                                {#<div class="row">#}
+                                    {#<div class="col-md-8">#}
+                                        {#<div class="form-group">#}
+                                            {#<label>Produkt</label>#}
+                                            {#<select class="form-control product_form {% if key in productsList|keys %}old_product{% endif %}"#}
+                                                    {#name="product[]">#}
+
+                                                {#<option value="null"></option>#}
+                                                {#{% for productList in productsList %}#}
+                                                    {#<option value="{{ productList }}"#}
+                                                            {#{% if productList == key %}selected{% endif %}>{{ productList }}</option>#}
+                                                {#{% endfor %}#}
+                                            {#</select>#}
+                                        {#</div>#}
+                                    {#</div>#}
+                                    {#<div class="col-md-4">#}
+                                        {#<div class="form-group">#}
+                                            {#<label>Ilość</label>#}
+                                            {#<input class="form-control" type="number" name="quantity[]"#}
+                                                   {#value="{{ value }}">#}
+                                        {#</div>#}
+                                    {#</div>#}
+                                {#</div>#}
+                            {#{% endfor %}#}
+                        {#{% endfor %}#}
+                        {#<div class="row">#}
+                            {#<div class="col-md-8">#}
+                                {#<div class="form-group">#}
+                                    {#<label>Produkt</label>#}
+                                    {#<select class="form-control product_form" name="product[]">#}
+
+                                        {#<option value="null"></option>#}
+                                        {#{% for productList in productsList %}#}
+                                            {#<option value="{{ productList }}">{{ productList }}</option>#}
+                                        {#{% endfor %}#}
+                                    {#</select>#}
+                                {#</div>#}
+                            {#</div>#}
+                            {#<div class="col-md-4">#}
+                                {#<div class="form-group">#}
+                                    {#<label>Ilość</label>#}
+                                    {#<input class="form-control" type="number" name="quantity[]">#}
+                                {#</div>#}
+                            {#</div>#}
+                        {#</div>#}
+                    {#</div>#}
+
+                    {#<div class="row">#}
+                        {#<div class="text-center">#}
+                            {#<button type="submit" class="btn btn-info btn-fill btn-wd">Zapisz</button>#}
+                        {#</div>#}
+
+                        {#<div class="clearfix"></div>#}
+                    {#</div>#}
+                {#</form>#}
+                {#<br>#}
+                {#<div class="row">#}
+                    {#<div class="text-center">#}
+                        {#{{ form_start(delete_form) }}#}
+                        {#<button type="submit" class="btn btn-danger btn-fill btn-wd" value="Delete">Usuń</button>#}
+                        {#{{ form_end(delete_form) }}#}
+                    {#</div>#}
+                {#</div>#}
+                {#<br>#}
+            {#</div>#}
+        {#</div>#}
+    {#</div>#}
 {% endblock %}

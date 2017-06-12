@@ -3,8 +3,8 @@
 {% block body %}
     <h1>Klient</h1>
     <p class="category">
-        <a href="{{ path('clients_index') }}">Wróć do listy</a> -
-        <a href="{{ path('clients_edit', { 'id': client.id }) }}">Edytuj</a>
+        <a type="button" class="btn btn-success btn-fill btn-wd" href="{{ path('clients_index') }}">Wróć do listy</a>
+        <a type="button" class="btn btn-info btn-fill btn-wd" href="{{ path('clients_edit', { 'id': client.id }) }}">Edytuj</a>
     </p>
 
     <table class="table">

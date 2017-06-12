@@ -7,13 +7,15 @@
         <h1>Zamówienie</h1>
         <div class="pull-left" style="padding-top: 10px">
             <p class="category">
-                <a href="{{ path('orders_index') }}">Wróć do listy</a>
-                {% if order.status == 1 %} - <a href="{{ path('orders_edit', { 'id': order.id }) }}">
-                        Edytuj</a>{% endif %}
+
+                <a type="button" class="btn btn-success btn-fill btn-wd" href="{{ path('orders_index') }}" >Wróć do listy</a>
+                {% if order.status == 1 %}<a type="button" class="btn btn-info btn-fill btn-wd"
+                                                     href="{{ path('orders_edit', { 'id': order.id }) }}" >Edytuj</a>
+                {% endif %}
 
             </p>
         </div>
-        <div class="pull-right" style="padding-right: 35px; padding-bottom: 10px">
+        <div class="pull-right" style="padding-right: 35px; padding-top: 10px;">
             <form action="{{ path('order_move', {'id': order.id}) }}" method="POST">
                 <button class="
                         btn

@@ -33,6 +33,9 @@ $(function () {
         var ownPrice = $('#radio-price-own').val();
         $('#radio3').attr('value', ownPrice);
 
+        var orderSum = $('#orderSum').text();
+        console.log("abc " + orderSum);
+
         var name = $('.modal-title').text();
         var quantity = $('#product-quantity').val();
         var price = $('input[name=radio]:checked', '#addProductForm').val();
@@ -48,10 +51,10 @@ $(function () {
 
             var newListedProduct = $("" +
                 "<tr class='" + name + "'>" +
-                "<td class='name'>" + name + "<input type='hidden' name='product[]' value='" + name + "'></td>" +
-                "<td class='price'>" + price + " zł<input type='hidden' name='price[]' value='" + price + "'></td>" +
-                "<td class='quantity'>" + quantity + "<input type='hidden' name='quantity[]' value='" + quantity + "'></td>" +
-                "<td class='sum'>" + sum.toFixed(2) + " zł<input type='hidden' name='sum[]' value='" + sum + "'></td>" +
+                    "<td class='name'>" + name + "<input type='hidden' name='product[]' value='" + name + "'></td>" +
+                    "<td class='price'>" + price + " zł<input type='hidden' name='price[]' value='" + price + "'></td>" +
+                    "<td class='quantity'>" + quantity + "<input type='hidden' name='quantity[]' value='" + quantity + "'></td>" +
+                    "<td class='sum'>" + sum.toFixed(2) + " zł<input type='hidden' name='sum[]' value='" + sum + "'></td>" +
                 "</tr>");
 
             var listSum = $('#productsListSum');
